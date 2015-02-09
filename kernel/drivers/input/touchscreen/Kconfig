@@ -1069,6 +1069,15 @@ config TOUCHSCREEN_FT5X0X
 		tristate "ft5x0x touchscreen panel support "
 		depends on I2C2_RK29 || I2C2_RK30
 
+
+config TOUCHSCREEN_FT5506
+	tristate "FT5506 based touchscreens: FT5506 Interface"
+	depends on I2C2_RK29 || I2C2_RK30
+	help
+	say Y here if you have a touchscreen interface using the FT5506 
+	controller,and your board-specific initialization code includes that
+	in its table of I2C devices.
+
 config ATMEL_MXT1386
         tristate "ATMEL_MXT1386 touchscreen panel support"
         depends on I2C

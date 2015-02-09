@@ -51,6 +51,9 @@ static int em3027_get_time(struct device *dev, struct rtc_time *tm)
 		{client->addr, 0, 1, &addr},		/* setup read addr */
 		{client->addr, I2C_M_RD, 7, buf},	/* read time/date */
 	};
+	//shcho add scl_rate  100,000Hz
+	msgs[0].scl_rate = 100*1000;
+	msgs[1].scl_rate = 100*1000;
 
 	/* read time/date registers */
 	if ((i2c_transfer(client->adapter, &msgs[0], 2)) != 2) {
@@ -77,6 +80,7 @@ static int em3027_set_time(struct device *dev, struct rtc_time *tm)
 	struct i2c_msg msg = {
 		client->addr, 0, 8, buf,	/* write time/date */
 	};
+	msg.scl_rate = 100*1000;
 
 	buf[0] = EM3027_REG_WATCH_SEC;
 	buf[1] = bin2bcd(tm->tm_sec);
@@ -106,6 +110,8 @@ static int em3027_probe(struct i2c_client *client,
 {
 	struct rtc_device *rtc;
 
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
 		return -ENODEV;
 
@@ -130,7 +136,7 @@ static int em3027_remove(struct i2c_client *client)
 }
 
 static struct i2c_device_id em3027_id[] = {
-	{ "em3027", 0 },
+	{ "rtc-em3027", 0 },
 	{ }
 };
 
@@ -145,6 +151,7 @@ static struct i2c_driver em3027_driver = {
 
 static int __init em3027_init(void)
 {
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 	return i2c_add_driver(&em3027_driver);
 }
 

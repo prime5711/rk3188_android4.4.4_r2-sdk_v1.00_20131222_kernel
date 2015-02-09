@@ -25,11 +25,19 @@ static int rk30_rmii_io_init(void)
 	iomux_set(RMII_TXD0);
 	iomux_set(RMII_TXD1);
 	iomux_set(RMII_TXEN);
+
+	#if defined (CONFIG_RK29_VMAC_EXT_CLK)      
+	iomux_set(RMII_CLKIN);
+	#else
+	iomux_set(RMII_CLKOUT);
+	#endif
+
 	iomux_set(RMII_CLKOUT);
 
 	//rk3188 gpio3 and sdio drive strength , 
       grf_writel(0x0f<16|0x0f,GRF_IO_CON3);
       
+	#if 0
 	//phy power gpio
 	err = gpio_request(PHY_PWR_EN_GPIO, "phy_power_en");
 	if (err) {
@@ -39,18 +47,44 @@ static int rk30_rmii_io_init(void)
 	//phy power down
 	gpio_direction_output(PHY_PWR_EN_GPIO, !PHY_PWR_EN_VALUE);
 	gpio_set_value(PHY_PWR_EN_GPIO, !PHY_PWR_EN_VALUE);
+	#endif
+
+#if 1 //shcho
+	//phy reset gpio
+	err = gpio_request(PHY_RST_GPIO, "rmii_rst");
+	if (err) {
+	return -1;
+	}
+	
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  );
+	gpio_direction_output(PHY_RST_GPIO, GPIO_LOW);
+	msleep(20);
+	gpio_set_value(PHY_RST_GPIO, GPIO_HIGH);
+#else
+
+	err = gpio_request(RK30_PIN0_PC0, "rmii_rst");
+	if (err) {
+		return -1;
+	}
+	
+	gpio_direction_input(RK30_PIN0_PC0);
+#endif
+
 
 	return 0;
 }
 
 static int rk30_rmii_io_deinit(void)
 {
+	#if 0
 	//phy power down
 	printk("enter %s ",__func__);
 	gpio_direction_output(PHY_PWR_EN_GPIO, !PHY_PWR_EN_VALUE);
 	gpio_set_value(PHY_PWR_EN_GPIO, !PHY_PWR_EN_VALUE);
 	//free
 	gpio_free(PHY_PWR_EN_GPIO);
+	#endif
+
 	return 0;
 }
 

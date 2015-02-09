@@ -20,7 +20,8 @@ obj-$(CONFIG_DVFS) += dvfs.o
 obj-y += board.o
 
 board-$(CONFIG_MACH_RK3188_FPGA) += board-rk3188-fpga.o
-board-$(CONFIG_MACH_RK3188_TB) += ../mach-rk30/board-rk3168-tb.o
+#board-$(CONFIG_MACH_RK3188_TB) += ../mach-rk30/board-rk3168-tb.o
+board-$(CONFIG_MACH_RK3188_TB) += ../mach-rk30/board-rk3168-tb-dh.o
 board-$(CONFIG_MACH_RK3188_SDK) += board-rk3188-sdk.o
 board-$(CONFIG_MACH_RK3188_LR097) += ../mach-rk30/board-rk3168-LR097.o
 board-$(CONFIG_MACH_RK3188_DS1006H) += board-rk3188-ds1006h.o

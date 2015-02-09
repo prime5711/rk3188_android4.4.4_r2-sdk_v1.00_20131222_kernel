@@ -38,23 +38,3 @@ choice
 
 endchoice
 
-config  PHY_PORT_NUM
-        int "phy port number selected (More than one port on Switch)"
-        depends on RK29_VMAC
-        default 0
-        help
-                 0:phy dev 0:00
-                 1:phy dev 0:01
-                 2:phy dev 0:02
-                      ---More---
-
-
-config RK_PHY_REG_SYS
-        tristate "RK ethernet PHY reg sys file support"
-        depends on RK29_VMAC
-        select MII
-        select PHYLIB
-        select CRC32
-        help
-          See and Set phy reg on sys file
-

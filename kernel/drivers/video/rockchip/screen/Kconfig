@@ -5,6 +5,9 @@ choice
 config LCD_NULL
 	bool "NULL"
 
+config LCD_RK618_CMI_EJ101IA_1280X800
+	bool "RK3188 RK618 Daihansci CMI EJ101IA LCD 1280X800"
+
 config LCD_RK2928
 	bool "RK2928 LCD"
         depends on MACH_RK2928
