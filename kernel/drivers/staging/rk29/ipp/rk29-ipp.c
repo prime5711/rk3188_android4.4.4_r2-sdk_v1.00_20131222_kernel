@@ -51,6 +51,10 @@
 #define IPP_VERSION "rk30-ipp 1.003"
 #endif
 
+#ifdef CONFIG_ARCH_RK3188
+#define IPP_VERSION "rk30-ipp 1.003"
+#endif
+
 //#define IPP_TEST
 #ifdef IPP_TEST
 
@@ -1276,7 +1280,12 @@ static void ipp_test_work_handler(struct work_struct *work)
 		 uint32_t dst_addr;
 		 uint8_t *p;
 		 pm_message_t pm;
-#if 1
+
+		printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+
+//shcho change 1->0
+//  #if 1
+#if 0
 //test WIMO bug
 #define CAMERA_MEM 0x90400000
 
@@ -1300,13 +1309,18 @@ static void ipp_test_work_handler(struct work_struct *work)
 		ipp_req.timeout = 100;
 		ipp_req.flag = IPP_ROT_90;
 
+
+		printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+
 		while(ret==0)
 		{
 			ret = ipp_blit_sync_real(&ipp_req);
 			msleep(10);
 		}
 #endif
-/*
+
+
+//  /*
 //test zyc's bug		 
 
 		uint32_t size = 800*480;
@@ -1341,28 +1355,29 @@ static void ipp_test_work_handler(struct work_struct *work)
 		ipp_req.deinterlace_para2 = 0;
 
 		ipp_req.complete = ipp_test_complete;
-*/
+//  */
 		/*0 test whether IPP_CONFIG is set correctly*/
-		/*
+//  		/*
 		ipp_blit_sync(&ipp_req);
 		ipp_req.dst0.w = 480;
 		ipp_req.dst0.h = 320;
 		ipp_req.dst_vir_w = 480;
 		ipp_blit_sync(&ipp_req);
-		*/
+//  		*/
 		
 		/*1 test ipp_blit_sync*/
-		/*
+//  		/*
 		while(!ret)
 		{
 			ipp_req.timeout = 50;
 			//ret = ipp_do_blit(&ipp_req);
 			ret = ipp_blit_sync(&ipp_req);
-		}*/
+		}
+//  		*/
 		
 
 		/*2.test ipp_blit_async*/
-		/*
+//  		/*
 		do
 		{
 			test_condition = 0;
@@ -1379,7 +1394,7 @@ static void ipp_test_work_handler(struct work_struct *work)
 			}
 		}while(ret>0);
 		printk("test ipp_blit_async over!!!\n");
-		*/
+//  		*/
 
 		/*3.two async req,get the rigt result respectively*/
 		
@@ -1391,13 +1406,13 @@ static void ipp_test_work_handler(struct work_struct *work)
 	[   10.282832] ipp_blit_async2
 	[   10.284304] ipp_test_complete retval=1        
 		*/
-		/*
+//  		/*
 		ret1 = ipp_blit_async(&ipp_req);
 		ret2 = ipp_blit_async(&ipp_req);
-		*/
+//  		*/
 
 		/*4 two sync req,get the rigt result respectively*/
-		/*
+//  		/*
 		[   10.703628] ipp_blit_async
 		[   10.711211] wait_event_interruptible waitret= 0
 		[   10.712878] ipp_blit_async2
@@ -1407,21 +1422,22 @@ static void ipp_test_work_handler(struct work_struct *work)
 		[   10.727422] ipp_blit_async2
 		[   10.790052] hw time: 1 ms, irq time: 48 ms
 		[   10.791294] ipp_blit_sync wait_ret=0,wait_event_timeout 
-		*/
-		/*
+//  		*/
+//  		/*
 		ret1 = ipp_blit_sync(&ipp_req);
-		ret2 = ipp_blit_sync(&ipp_req);*/
+		ret2 = ipp_blit_sync(&ipp_req) ;
+//  		*/
 
 		/*5*/
-		/*
+//  		/*
 		ret1 = ipp_blit_async(&ipp_req);
 		ret2 = ipp_blit_sync(&ipp_req);	
 		ret1 = ipp_blit_sync(&ipp_req);
 		ret2 = ipp_blit_async(&ipp_req);
-		*/
+//  		*/
 
 		/*6.call IPP driver in the kernel space and the user space at the same time*/
-		/*
+//  		/*
 			ipp_req.src_vir_w = 280;
 		ipp_req.dst_vir_w = 800;
 		do
@@ -1437,10 +1453,10 @@ static void ipp_test_work_handler(struct work_struct *work)
 		ipp_req.dst_vir_w = 600;
 
 		ipp_blit_sync(&ipp_req);
-		*/
+//  		*/
 		
 		/*7.suspand and resume*/
-		/*
+//  		/*
 		//do
 		{
 			 ret = ipp_blit_async(&ipp_req);
@@ -1448,8 +1464,9 @@ static void ipp_test_work_handler(struct work_struct *work)
 			 msleep(1000);
 			 ipp_resume(NULL);
 		}
-		//while(ret==0);*/
-	/*	
+		//while(ret==0);
+//  		*/
+//  	/*	
 		do
 		{
 			 ret = ipp_blit_async(&ipp_req);
@@ -1459,10 +1476,10 @@ static void ipp_test_work_handler(struct work_struct *work)
 
 		}
 		while(ret>0);
-*/
+//  */
 
 		/*8 test special up scaling*/
-		/*
+//  		/*
 		ipp_req.src0.fmt = IPP_Y_CBCR_H2V2;
 		ipp_req.src0.w = 128;
 		ipp_req.src0.h = 128;
@@ -1500,17 +1517,17 @@ static void ipp_test_work_handler(struct work_struct *work)
 		ret = -1;
 		ret = ipp_blit_sync(&ipp_req);
 		printk("176x144->800x480: %d \n",ret);
-		*/
+//  		*/
 
 		/*9 test rotate config*/
-/*
+//  /*
 		ipp_req.flag = IPP_ROT_180;
 		ipp_blit_sync(&ipp_req);
 		ipp_req.flag = IPP_ROT_270;
 		ipp_blit_sync(&ipp_req);
 		
 		free_pages(srcY, 9);
-*/
+//  */
 //test deinterlace
 #if 0
 		uint32_t size = 16*16;
@@ -1563,7 +1580,7 @@ static void ipp_test_work_handler(struct work_struct *work)
 		ipp_do_blit(&ipp_req);
 
 		
-/*
+//  /*
 		for(i=0;i<8;i++)
 		{
 			for(j=0;j<32;j++)
@@ -1603,7 +1620,7 @@ static void ipp_test_work_handler(struct work_struct *work)
 			}
 			printk("\n");
 		}
-*/		
+//  */		
 		kfree(srcY);
 #endif
 

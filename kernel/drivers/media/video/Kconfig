@@ -1045,6 +1045,35 @@ config OV5640_FIXEDFOCUS
 	bool "OV5640 fixed focus"
 endchoice
 
+
+
+
+config SOC_CAMERA_OV971X
+	tristate "ov971x camera support for rockchip"
+	depends on SOC_CAMERA && I2C && VIDEO_RK29
+	default y
+	help
+		This is a ov971x camera driver for rockchip
+
+config OV971X_USER_DEFINED_SERIES
+	depends on SOC_CAMERA_OV971X
+	bool "OV971X user defined init series"
+	default n
+
+choice
+	prompt "OV971X Module Focus select"
+	depends on SOC_CAMERA_OV971X
+	default OV971X_AUTOFOCUS
+	---help---
+
+config OV971X_AUTOFOCUS
+	bool "OV971X auto focus"
+
+config OV971X_FIXEDFOCUS
+	bool "OV971X fixed focus"
+endchoice
+
+
 config SOC_CAMERA_S5K6AA
 	tristate "Samsung S5K6AA camera support for rockchip"
 	depends on SOC_CAMERA && I2C

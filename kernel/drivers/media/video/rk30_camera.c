@@ -15,6 +15,7 @@
 static int rk_sensor_iomux(int pin)
 {    
 #if defined(CONFIG_ARCH_RK3066B) || defined(CONFIG_ARCH_RK3188)
+	printk("\n\n\t \033[22;30;31m pin=0x%08x: line:%d:@%s in %s                \033[0m \n\n",pin,__LINE__,__FUNCTION__,__FILE__); 
     iomux_set_gpio_mode(pin);
 #elif defined(CONFIG_ARCH_RK30)
     switch (pin)

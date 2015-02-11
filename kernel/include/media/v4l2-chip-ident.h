@@ -85,6 +85,9 @@ enum {
 	V4L2_IDENT_OV7690 = 267,
 	V4L2_IDENT_OV3660 = 268,
 
+	//shcho add : 아무 값이나 넣었음
+	V4L2_IDENT_OV971X = 280,
+
 	/* module saa7146: reserved range 300-309 */
 	V4L2_IDENT_SAA7146 = 300,
 

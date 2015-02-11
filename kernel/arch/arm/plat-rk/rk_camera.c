@@ -1331,6 +1331,8 @@ static int rk_sensor_io_init(void)
 	static bool is_init = false;
 	struct rk29camera_platform_data* plat_data = &rk_camera_platform_data;
 
+	printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+	
     if(is_init) {		
 		return 0;
 	} else {
@@ -1383,6 +1385,7 @@ static int rk_sensor_io_init(void)
                 plat_data->info[i].fival[j].width = 800;
                 plat_data->info[i].fival[j].height = 600;
             } 
+			printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
             if (plat_data->info[i].fival[j].width && plat_data->info[i].fival[j].height) {
                 rk29_sensor_fps_get(i,&plat_data->info[i].fival[j].discrete.denominator,
                     plat_data->info[i].fival[j].width,plat_data->info[i].fival[j].height);
@@ -1395,6 +1398,7 @@ static int rk_sensor_io_init(void)
         
 	continue;
 sensor_io_init_erro:
+		printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 		_rk_sensor_io_deinit_(&plat_data->gpio_res[i]);
 	}
     
@@ -1405,6 +1409,7 @@ sensor_io_init_erro:
 
         i++;
     }
+	printk("\n\n\t \033[22;30;33m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 	return 0;
 }
 

@@ -10,7 +10,7 @@ echo -e "	>>>>  CROSS_COMPILE is automatically select from prebuilt dir"
 printf "\033[0m \n\n" 
 echo ""
 
-make -j8 ARCH=arm CROSS_COMPILE=../prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi- \
+make -j8 ARCH=arm CROSS_COMPILE=../../RK3188_ANDROID4.4.4_r2-SDK_V1.00_20131222/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi- \
 $1 $2 $3 $4 $5 
 
 

@@ -41,17 +41,18 @@
 #include <plat/vpu_service.h>
 #include "../../video/rockchip/rga/rga.h"
 #if defined(CONFIG_ARCH_RK30)||defined(CONFIG_ARCH_RK3188)
-#include <mach/rk30_camera.h>
-#include <mach/cru.h>
-#include <mach/pmu.h>
+	#include <mach/rk30_camera.h>
+	#include <mach/cru.h>
+	#include <mach/pmu.h>
 #endif
 
 #if defined(CONFIG_ARCH_RK2928)
-#include <mach/rk2928_camera.h>
-#include <mach/cru.h>
-#include <mach/pmu.h>
-#define SOFT_RST_CIF1 (SOFT_RST_MAX+1)
+	#include <mach/rk2928_camera.h>
+	#include <mach/cru.h>
+	#include <mach/pmu.h>
+	#define SOFT_RST_CIF1 (SOFT_RST_MAX+1)
 #endif
+
 #include <asm/cacheflush.h>
 static int debug = 0;
 module_param(debug, int, S_IRUGO|S_IWUSR);
@@ -235,6 +236,7 @@ module_param(debug, int, S_IRUGO|S_IWUSR);
 #endif
 
 #define IS_CIF0()		(pcdev->hostid == RK_CAM_PLATFORM_DEV_ID_0)
+
 #if (CONFIG_CAMERA_SCALE_CROP_MACHINE == RK_CAM_SCALE_CROP_IPP)
 #define CROP_ALIGN_BYTES (0x03)
 #define CIF_DO_CROP 0
@@ -319,10 +321,14 @@ module_param(debug, int, S_IRUGO|S_IWUSR);
                 SOCAM_DATAWIDTH_8|SOCAM_DATAWIDTH_10|\
                 SOCAM_MCLK_24MHZ |SOCAM_MCLK_48MHZ)
 
-#define RK_CAM_W_MIN        48
-#define RK_CAM_H_MIN        32
-#define RK_CAM_W_MAX        3856            /* ddl@rock-chips.com : 10M Pixel */
-#define RK_CAM_H_MAX        2764
+//  #define RK_CAM_W_MIN        48
+//  #define RK_CAM_H_MIN        32
+#define RK_CAM_W_MIN        640
+#define RK_CAM_H_MIN        480
+//  #define RK_CAM_W_MAX        3856            /* ddl@rock-chips.com : 10M Pixel */
+//  #define RK_CAM_H_MAX        2764
+#define RK_CAM_W_MAX        1920            /* ddl@rock-chips.com : 10M Pixel */
+#define RK_CAM_H_MAX        1080
 #define RK_CAM_FRAME_INVAL_INIT 0
 #define RK_CAM_FRAME_INVAL_DC 0          /* ddl@rock-chips.com :  */
 #define RK30_CAM_FRAME_MEASURE  5
@@ -862,7 +868,11 @@ static int rk_pixfmt2ippfmt(unsigned int pixfmt, int *ippfmt)
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 		{
+	//org
 			*ippfmt = IPP_Y_CBCR_H2V2;
+
+//  			*ippfmt = IPP_Y_CBCR_H2V1;
+
 			break;
 		}
 		default:
@@ -874,7 +884,11 @@ rk_pixfmt2ippfmt_err:
 	return -1;
 }
 
+
+// 원래는 0 :
+// SCLALE_CROP : IPP->RGA로 바꾸면 풀어야 한다.
 #if 0
+//  #if 1
 static int rk_pixfmt2rgafmt(unsigned int pixfmt, int *ippfmt)
 {
 	switch (pixfmt)
@@ -2126,11 +2140,14 @@ static void rk_camera_setup_format(struct soc_camera_device *icd, __u32 host_pix
 	struct soc_camera_host *ici = to_soc_camera_host(icd->dev.parent);
     struct rk_camera_dev *pcdev = ici->priv;
     unsigned int cif_fs = 0,cif_crop = 0;
-    unsigned int cif_fmt_val = read_cif_reg(pcdev->base,CIF_CIF_FOR) | INPUT_MODE_YUV|YUV_INPUT_422|INPUT_420_ORDER_EVEN|OUTPUT_420_ORDER_EVEN;
+
+//      unsigned int cif_fmt_val = read_cif_reg(pcdev->base,CIF_CIF_FOR) | INPUT_MODE_YUV|YUV_INPUT_422|INPUT_420_ORDER_EVEN|OUTPUT_420_ORDER_EVEN;
+    unsigned int cif_fmt_val = read_cif_reg(pcdev->base,CIF_CIF_FOR) | INPUT_MODE_YUV |YUV_OUTPUT_422 | YUV_INPUT_422|INPUT_420_ORDER_EVEN|OUTPUT_420_ORDER_EVEN;
 	
 	const struct soc_mbus_pixelfmt *fmt;
 	fmt = soc_mbus_get_fmtdesc(icd_code);
 
+	printk("\n\n\t \033[22;30;31m host_pixfmt=0x%08x: line:%d:@%s in %s                \033[0m \n\n",host_pixfmt,__LINE__,__FUNCTION__,__FILE__  );
 	if((host_pixfmt == V4L2_PIX_FMT_RGB565) || (host_pixfmt == V4L2_PIX_FMT_RGB24)){
 		if(fmt->fourcc == V4L2_PIX_FMT_NV12)
 			host_pixfmt = V4L2_PIX_FMT_NV12;
@@ -2152,11 +2169,17 @@ static void rk_camera_setup_format(struct soc_camera_device *icd, __u32 host_pix
     		pcdev->pixfmt = host_pixfmt;
     		break;
         case V4L2_PIX_FMT_NV12:
-            cif_fmt_val |= YUV_OUTPUT_420;
-    		cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
-			if (pcdev->frame_inval != RK_CAM_FRAME_INVAL_INIT)
-				pcdev->frame_inval = RK_CAM_FRAME_INVAL_INIT;
-			pcdev->pixfmt = host_pixfmt;
+//              cif_fmt_val |= YUV_OUTPUT_420;
+//      		cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
+//  			if (pcdev->frame_inval != RK_CAM_FRAME_INVAL_INIT)
+//  				pcdev->frame_inval = RK_CAM_FRAME_INVAL_INIT;
+//  			pcdev->pixfmt = host_pixfmt;
+
+            cif_fmt_val &= ~YUV_OUTPUT_422;
+		    cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
+		    pcdev->frame_inval = RK_CAM_FRAME_INVAL_DC;
+		    pcdev->pixfmt = V4L2_PIX_FMT_RGB24;
+
             break;
     	case V4L2_PIX_FMT_NV21:
     		cif_fmt_val |= YUV_OUTPUT_420;
@@ -2165,25 +2188,30 @@ static void rk_camera_setup_format(struct soc_camera_device *icd, __u32 host_pix
     			pcdev->frame_inval = RK_CAM_FRAME_INVAL_INIT;
     		pcdev->pixfmt = host_pixfmt;
     		break;
-            default:                                                                                /* ddl@rock-chips.com : vip output format is hold when pixfmt is invalidate */
-    			cif_fmt_val |= YUV_OUTPUT_422;
-                break;
+        default:                                                                                /* ddl@rock-chips.com : vip output format is hold when pixfmt is invalidate */
+    		cif_fmt_val |= YUV_OUTPUT_422;
+            break;
     }
     switch (icd_code)
     {
         case V4L2_MBUS_FMT_UYVY8_2X8:
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
             cif_fmt_val = YUV_INPUT_ORDER_UYVY(cif_fmt_val);
             break;
         case V4L2_MBUS_FMT_YUYV8_2X8:
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
             cif_fmt_val = YUV_INPUT_ORDER_YUYV(cif_fmt_val);
             break;
     	case V4L2_MBUS_FMT_YVYU8_2X8:
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
     		cif_fmt_val = YUV_INPUT_ORDER_YVYU(cif_fmt_val);
     		break;
     	case V4L2_MBUS_FMT_VYUY8_2X8:
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
     		cif_fmt_val = YUV_INPUT_ORDER_VYUY(cif_fmt_val);
     		break;
         default :
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 			cif_fmt_val = YUV_INPUT_ORDER_YUYV(cif_fmt_val);
             break;
     }
@@ -2274,6 +2302,7 @@ static int rk_camera_get_formats(struct soc_camera_device *icd, unsigned int idx
 		formats++;
 		if (xlate) {
 			xlate->host_fmt = &rk_camera_formats[0];
+//  			xlate->host_fmt = &rk_camera_formats[1];
 			xlate->code = code;
 			xlate++;
 			dev_dbg(dev, "Providing format %s using code %d\n",
@@ -3302,9 +3331,10 @@ static int rk_camera_set_ctrl(struct soc_camera_device *icd,
 
 	struct soc_camera_host *ici = to_soc_camera_host(icd->dev.parent);
 	const struct v4l2_queryctrl *qctrl;
-#ifdef CONFIG_VIDEO_RK29_DIGITALZOOM_IPP_ON    
+	//shcho :  ifdef 가 org
+//  #ifdef CONFIG_VIDEO_RK29_DIGITALZOOM_IPP_ON    
     struct rk_camera_dev *pcdev = ici->priv;
-#endif
+//  #endif
     int ret = 0;
 
 	qctrl = rk_camera_soc_camera_find_qctrl(ici->ops, sctrl->id);

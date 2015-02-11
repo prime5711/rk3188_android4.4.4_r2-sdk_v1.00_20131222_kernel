@@ -29,19 +29,23 @@ module_param(debug, int, S_IRUGO|S_IWUSR);
 //  											 SOCAM_DATA_ACTIVE_HIGH | SOCAM_DATAWIDTH_8  |SOCAM_MCLK_24MHZ)
 #define SENSOR_BUS_PARAM					 (SOCAM_MASTER |\
 											 SOCAM_PCLK_SAMPLE_RISING|SOCAM_HSYNC_ACTIVE_HIGH| SOCAM_VSYNC_ACTIVE_LOW|\
-											 SOCAM_DATA_ACTIVE_HIGH | SOCAM_DATAWIDTH_10  |SOCAM_MCLK_24MHZ)
+											 SOCAM_DATA_ACTIVE_HIGH | SOCAM_DATAWIDTH_8  |SOCAM_MCLK_24MHZ)
 
 //  #define SENSOR_PREVIEW_W					 1280
 //  #define SENSOR_PREVIEW_H					 720
-//  #define SENSOR_PREVIEW_W					 720
-//  #define SENSOR_PREVIEW_H					 1280
+#define SENSOR_PREVIEW_W					 720
+#define SENSOR_PREVIEW_H					 1280
 //  #define SENSOR_PREVIEW_W					 640
 //  #define SENSOR_PREVIEW_H					 480
-#define SENSOR_PREVIEW_W					 800
-#define SENSOR_PREVIEW_H					 600
+//  #define SENSOR_PREVIEW_W					 800
+//  #define SENSOR_PREVIEW_H					 600
 //  #define SENSOR_PREVIEW_W					 320
 //  #define SENSOR_PREVIEW_H					 240
 
+//이것은 영상이 화면에 보이는 것과 별 상관이 없네 
+// 그런데 언제부터인지 동영상촬영이 되지 않아서 디버깅해야 함.(일단 fps를 30000으로 다시 복구함)
+// 15000으로 바꾸면 동영상 녹화되지 않는다.
+// 30000으로 바꾸면 동영상 녹화는 되지만 정보가 7fps가 된다.
 #define SENSOR_PREVIEW_FPS					 30000	   // 15fps 
 #define SENSOR_FULLRES_L_FPS				 30000	   // 7.5fps
 #define SENSOR_FULLRES_H_FPS				 30000	   // 7.5fps
@@ -299,7 +303,9 @@ static struct rk_sensor_reg sensor_init_data[] ={
 {0x14, 0x40},  // ;Gain Ceiling 8X
 
 	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
-	{0x04 ,0x88},	// ; /shcho add Mirror
+	//화면에는 정상인데 저장시 좌우가 바뀌어서 거울처럼 보게 해야 해서 설정하지 않는다.
+	// 왜 변화가 없지? --> 그래도 거울을 보는 것 처럼 하는 것이 좋겠다.(사용자를 바라보고 있으니까)
+//  	{0x04 ,0x88},	// ; /shcho add Mirror
 	SensorEnd
 
 #else //720p
@@ -412,7 +418,8 @@ static struct rk_sensor_reg sensor_init_data[] ={
 	{0x14 ,0x40},	// ; Gain Ceiling 8X
 
 	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
-	{0x04 ,0x88},	// ; /shcho add Mirror
+	//화면에는 정상인데 저장시 좌우가 바뀌어서 거울처럼 보게 해야 해서 설정하지 않는다.
+//  	{0x04 ,0x88},	// ; /shcho add Mirror
 	SensorEnd
 	
 #endif
@@ -532,7 +539,8 @@ static struct rk_sensor_reg sensor_480p[]={
 {0x14, 0x40},  // ;Gain Ceiling 8X
 
 	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
-	{0x04 ,0x88},	// ; /shcho add Mirror
+	//화면에는 정상인데 저장시 좌우가 바뀌어서 거울처럼 보게 해야 해서 설정하지 않는다.
+//  	{0x04 ,0x88},	// ; /shcho add Mirror
 	SensorEnd
 };
 
@@ -558,6 +566,8 @@ static struct rk_sensor_reg sensor_preview_data[] =
 #define VPT 0x92
 
 static struct rk_sensor_reg sensor_720p[]={
+
+#if 1
 //  	{0x12 , 0x80},	// ;Reset
 //  	SensorWaitMs(5),
 //  ;;---------------------------------------------------------
@@ -667,64 +677,66 @@ static struct rk_sensor_reg sensor_720p[]={
 	{0x14 ,0x40},	// ; Gain Ceiling 8X
 
 	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
-	{0x04 ,0x88},	// ; /shcho add Mirror
-	SensorEnd
-	
-//  	{0x12, 0x00},
-//  	{0x09, 0x00},
-//  	{0x1e, 0x07},
-//  	{0x5f, 0x18},
-//  	{0x69, 0x04},
-//  	{0x65, 0x2a},
-//  	{0x68, 0x0a},
-//  	{0x39, 0x28},
-//  	{0x4d, 0x90},
-//  	{0xc1, 0x80},
-//  	{0x0c, 0x30},
-//  	{0x6d, 0x02},
-//  	{0x96, 0xf1},
-//  	{0xbc, 0x68},
-//  	{0x12, 0x00},
-//  	{0x3b, 0x00},
-//  	{0x97, 0x80},
-//  	{0x17, 0x25},
-//  	{0x18, 0xa2},
-//  	{0x19, 0x01},
-//  	{0x1a, 0xca},
-//  	{0x03, 0x0a},
-//  	{0x32, 0x07},
-//  	{0x98, 0x00},
-//  	{0x99, 0x00},
-//  	{0x9a, 0x00},
-//  	{0x57, 0x00},
-//  	{0x58, 0xc8},
-//  	{0x59, 0xa0},
-//  	{0x4c, 0x13},
-//  	{0x4b, 0x36},
-//  	{0x3d, 0x3c},
-//  	{0x3e, 0x03},
-//  	{0xbd, 0xa0},
-//  	{0xbe, 0xc8},
-//  	{0x4e, 0x14},
-//  	{0x4f, 0xFF},
-//  	{0x50, 0xFF},
-//  	{0x51, 0x41},
-//  	{0x26, VPT},
-//  	{0x2a, 0x98},
-//  	{0x2b, 0x06},
-//  	{0x2d, 0x00},
-//  	{0x2e, 0x00},
-//  	{0x13, 0xa5},
-//  	{0x14, 0x40},
-//  	{0x4a, 0x00},
-//  	{0x49, 0xce},
-//  	{0x22, 0x03},
-//  	{0x09, 0x00},
-//  
-//  	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
+	//화면에는 정상인데 저장시 좌우가 바뀌어서 거울처럼 보게 해야 해서 설정하지 않는다.
 //  	{0x04 ,0x88},	// ; /shcho add Mirror
-//  	SensorEnd
+	SensorEnd
+#else
+	{0x12, 0x00},
+	{0x09, 0x00},
+	{0x1e, 0x07},
+	{0x5f, 0x18},
+	{0x69, 0x04},
+	{0x65, 0x2a},
+	{0x68, 0x0a},
+	{0x39, 0x28},
+	{0x4d, 0x90},
+	{0xc1, 0x80},
+	{0x0c, 0x30},
+	{0x6d, 0x02},
+	{0x96, 0xf1},
+	{0xbc, 0x68},
+	{0x12, 0x00},
+	{0x3b, 0x00},
+	{0x97, 0x80},
+	{0x17, 0x25},
+	{0x18, 0xa2},
+	{0x19, 0x01},
+	{0x1a, 0xca},
+	{0x03, 0x0a},
+	{0x32, 0x07},
+	{0x98, 0x00},
+	{0x99, 0x00},
+	{0x9a, 0x00},
+	{0x57, 0x00},
+	{0x58, 0xc8},
+	{0x59, 0xa0},
+	{0x4c, 0x13},
+	{0x4b, 0x36},
+	{0x3d, 0x3c},
+	{0x3e, 0x03},
+	{0xbd, 0xa0},
+	{0xbe, 0xc8},
+	{0x4e, 0x14},
+	{0x4f, 0xFF},
+	{0x50, 0xFF},
+	{0x51, 0x41},
+	{0x26, VPT},
+	{0x2a, 0x98},
+	{0x2b, 0x06},
+	{0x2d, 0x00},
+	{0x2e, 0x00},
+	{0x13, 0xa5},
+	{0x14, 0x40},
+	{0x4a, 0x00},
+	{0x49, 0xce},
+	{0x22, 0x03},
+	{0x09, 0x00},
 
+	{0xc3 ,0x22},	// ; /shcho add Y0/Y1/Y2...Y9 
+	//화면에는 정상인데 저장시 좌우가 바뀌어서 거울처럼 보게 해야 해서 설정하지 않는다.
+//  	{0x04 ,0x88},	// ; /shcho add Mirror
+	SensorEnd
+#endif
 };
 
 /* 1920x1080 */
@@ -1080,8 +1092,9 @@ static struct sensor_v4l2ctrl_usr_s sensor_controls[] =
 
 //MUST define the current used format as the first item   
 static struct rk_sensor_datafmt sensor_colour_fmts[] = {
-//  	{V4L2_MBUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_JPEG},
-	{V4L2_MBUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_JPEG},
+//  //  	{V4L2_MBUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_JPEG},
+//  	{V4L2_MBUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_JPEG},
+	{V4L2_MBUS_FMT_YVYU8_2X8, V4L2_COLORSPACE_SRGB},
 
 //  	{V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_BE, V4L2_COLORSPACE_JPEG} //No Camera Message 
 

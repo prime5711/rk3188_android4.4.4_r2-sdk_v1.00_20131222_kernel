@@ -118,7 +118,7 @@
                           cif_chl)\
     new_camera_device_ex(sensor_name,\
                         face,\
-                        INVALID_VALUE,\
+                        /* org : INVALID_VALUE*/ 0,\
                         INVALID_VALUE,\
                         INVALID_VALUE,\
                         INVALID_VALUE,\
@@ -232,7 +232,10 @@
 #define RK29_CAM_SENSOR_OV7690 ov7690
 #define RK29_CAM_SENSOR_OV3640 ov3640
 #define RK29_CAM_SENSOR_OV3660 ov3660
+
+#define RK29_CAM_SENSOR_OV971X ov971x
 #define RK29_CAM_SENSOR_OV5640 ov5640
+
 #define RK29_CAM_SENSOR_OV5642 ov5642
 #define RK29_CAM_SENSOR_S5K6AA s5k6aa
 #define RK29_CAM_SENSOR_MT9D112 mt9d112
@@ -277,7 +280,10 @@
 #define RK29_CAM_SENSOR_NAME_OV7690 "ov7690"
 #define RK29_CAM_SENSOR_NAME_OV3640 "ov3640"
 #define RK29_CAM_SENSOR_NAME_OV3660 "ov3660"
+
 #define RK29_CAM_SENSOR_NAME_OV5640 "ov5640"
+#define RK29_CAM_SENSOR_NAME_OV971X "ov971x"
+
 #define RK29_CAM_SENSOR_NAME_OV5642 "ov5642"
 #define RK29_CAM_SENSOR_NAME_S5K6AA "s5k6aa"
 #define RK29_CAM_SENSOR_NAME_MT9D112 "mt9d112"
@@ -320,6 +326,9 @@
 #define ov3640_FULL_RESOLUTION     0x300000           // 3 megapixel
 #define ov3660_FULL_RESOLUTION     0x300000           // 3 megapixel
 #define ov5640_FULL_RESOLUTION     0x500000           // 5 megapixel
+
+#define ov971x_FULL_RESOLUTION     0x100000           // 1 megapixel
+
 #if defined(CONFIG_SOC_CAMERA_OV5642_INTERPOLATION_8M)
 	#define ov5642_FULL_RESOLUTION     0x800000            // 8 megapixel
 #else	
@@ -387,6 +396,9 @@
 #define ov3640_I2C_ADDR             0x78
 #define ov3660_I2C_ADDR             0x78
 #define ov5640_I2C_ADDR             0x78
+
+#define ov971x_I2C_ADDR             (0x30<<1)
+
 #define ov5642_I2C_ADDR             0x78
 
 #define s5k6aa_I2C_ADDR             0x78           //0x5a
@@ -443,7 +455,11 @@
 #define ov7690_PWRDN_ACTIVE             0x01
 #define ov3640_PWRDN_ACTIVE             0x01
 #define ov3660_PWRDN_ACTIVE             0x01
+
 #define ov5640_PWRDN_ACTIVE             0x01
+
+#define ov971x_PWRDN_ACTIVE             0x01
+
 #define ov5642_PWRDN_ACTIVE             0x01
 
 #define s5k6aa_PWRDN_ACTIVE             0x00           
@@ -515,6 +531,9 @@
 #define ov7690_PWRSEQ                   sensor_PWRSEQ_DEFAULT
 #define ov3640_PWRSEQ                   sensor_PWRSEQ_DEFAULT
 #define ov3660_PWRSEQ                   sensor_PWRSEQ_DEFAULT
+
+#define ov971x_PWRSEQ                   sensor_PWRSEQ_DEFAULT
+
 #define ov5640_PWRSEQ                   sensor_PWRSEQ_DEFAULT
 #define ov5642_PWRSEQ                   sensor_PWRSEQ_DEFAULT
 

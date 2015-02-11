@@ -99,6 +99,7 @@
 #include <linux/combo_mt66xx.h>
 #endif
 #include "board-rk3168-tb-camera.c"
+//  #include "board-rk3188-dh-ov971x.c"
 
 
 #if defined(CONFIG_TOUCHSCREEN_FT5506)
@@ -270,7 +271,9 @@ static int rk29_backlight_pwm_suspend(void)
 	}
 	gpio_direction_output(pwm_gpio, GPIO_LOW);
 #ifdef  LCD_DISP_ON_PIN
-	gpio_direction_output(BL_EN_PIN, !BL_EN_VALUE);
+//  	gpio_direction_output(BL_EN_PIN, !BL_EN_VALUE);
+//shcho 
+	gpio_direction_output(BL_EN_PIN, BL_EN_VALUE);
 #endif
 	return ret;
 }
@@ -290,9 +293,16 @@ static int rk29_backlight_pwm_resume(void)
 
 static struct rk29_bl_info rk29_bl_info = {
 	.pwm_id = PWM_ID,
-	.min_brightness=20,
+	.min_brightness=100,
 	.max_brightness=255,
 	.brightness_mode =BRIGHTNESS_MODE_CONIC,
+
+//      .pre_div = 100*1000, //shcho
+//      .pre_div = 1*1000, //shcho
+//      .pre_div = 10*1000, //shcho : 최초 성공 version 밝아서 수정예정 : backlight 1||1 + 0 옴 : 사실 PWM제어되지 않았음
+	.pre_div = 100*1000, //shcho  // 1 + 0
+//      .pre_div = 4*1000, //shcho  // 1 || 1 + 0
+
 	.bl_ref = PWM_EFFECT_VALUE,
 	.io_init = rk29_backlight_io_init,
 	.io_deinit = rk29_backlight_io_deinit,
@@ -2089,48 +2099,50 @@ static void __init rk30_i2c_register_board_info(void)
 #include <plat/key.h>
 
 static struct rk29_keys_button key_button[] = {
-        {
-                .desc   = "vol-",
-                .code   = KEY_VOLUMEDOWN,
+    {
+	    .desc   = "play",
+	    .code   = KEY_POWER,
+	    .gpio   = RK30_PIN0_PA4,
+	    .active_low = PRESS_LEV_LOW,
+	    .wakeup = 1,
+    },
+    {
+	    .desc   = "vol+",
+	    .code   = KEY_VOLUMEUP,
+	    .adc_value      = 1,
+	    .gpio = INVALID_GPIO,
+	    .active_low = PRESS_LEV_LOW,
+		.wakeup = 1,
+    },
+    {
+	    .desc   = "vol-",
+	    .code   = KEY_VOLUMEDOWN,
 		.adc_value      = 900,
-                .gpio   = INVALID_GPIO,
-                .active_low = PRESS_LEV_LOW,
-        },
-        {
-                .desc   = "play",
-                .code   = KEY_POWER,
-                .gpio   = RK30_PIN0_PA4,
-                .active_low = PRESS_LEV_LOW,
-                .wakeup = 1,
-        },
-        {
-                .desc   = "vol+",
-                .code   = KEY_VOLUMEUP,
-                .adc_value      = 1,
-                .gpio = INVALID_GPIO,
-                .active_low = PRESS_LEV_LOW,
-        },
-	{
-                .desc   = "menu",
-                .code   = EV_MENU,
-                .adc_value      = 133,
-                .gpio = INVALID_GPIO,
-                .active_low = PRESS_LEV_LOW,
-        },
-        {
-                .desc   = "home",
-                .code   = KEY_HOME,
-                .adc_value      = 550,
-                .gpio = INVALID_GPIO,
-                .active_low = PRESS_LEV_LOW,
-        },
-        {
-                .desc   = "esc",
-                .code   = KEY_BACK,
-                .adc_value      = 333,
+	    .gpio   = INVALID_GPIO,
+	    .active_low = PRESS_LEV_LOW,
+		.wakeup = 1,
+    },
+    {
+	    .desc   = "esc",
+	    .code   = KEY_BACK,
+	    .adc_value      = 333,
 		.gpio = INVALID_GPIO,
 		.active_low = PRESS_LEV_LOW,
 	},
+	{
+	    .desc   = "menu",
+	    .code   = EV_MENU,
+	    .adc_value      = 133,
+	    .gpio = INVALID_GPIO,
+	    .active_low = PRESS_LEV_LOW,
+    },
+    {
+	    .desc   = "home",
+	    .code   = KEY_HOME,
+	    .adc_value      = 550,
+	    .gpio = INVALID_GPIO,
+	    .active_low = PRESS_LEV_LOW,
+    },
 	{
 		.desc	= "camera",
 		.code	= KEY_CAMERA,
@@ -2206,8 +2218,15 @@ static void __init machine_rk30_board_init(void)
 	
 	pm_power_off = rk30_pm_power_off;
 	
-        gpio_direction_output(POWER_ON_PIN, GPIO_HIGH);
+   gpio_direction_output(POWER_ON_PIN, GPIO_HIGH);
 
+	//shcho add
+	gpio_request(RK30_PIN3_PD7, "usbhub_reset");
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_HIGH);
+	udelay(1000);
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_LOW);
+	udelay(1000);
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_HIGH);
 
 	rk30_i2c_register_board_info();
 	spi_register_board_info(board_spi_devices, ARRAY_SIZE(board_spi_devices));

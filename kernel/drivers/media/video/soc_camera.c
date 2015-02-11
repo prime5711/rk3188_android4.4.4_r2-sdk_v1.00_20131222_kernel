@@ -51,8 +51,10 @@ static int version = RK_SOC_CAMERA_VERSION;
 module_param(version, int, S_IRUGO);
 
 /* Default to VGA resolution */
-#define DEFAULT_WIDTH	640
-#define DEFAULT_HEIGHT	480
+//  #define DEFAULT_WIDTH	640
+//  #define DEFAULT_HEIGHT	480
+#define DEFAULT_WIDTH	1280
+#define DEFAULT_HEIGHT	720
 
 #define is_streaming(ici, icd)				\
 	(((ici)->ops->init_videobuf) ?			\

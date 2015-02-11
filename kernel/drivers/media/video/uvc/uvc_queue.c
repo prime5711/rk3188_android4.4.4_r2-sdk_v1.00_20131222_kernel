@@ -364,8 +364,8 @@ checks:
     		ret = -EINVAL;
     		goto done;
 		} else {
-		    //uvc_trace(UVC_TRACE_CAPTURE, "dequeue_buffer: waiting on buffer\n");
-            printk("dequeue_buffer: waiting on buffer\n");
+		    uvc_trace(UVC_TRACE_CAPTURE, "dequeue_buffer: waiting on buffer\n");
+//              printk("dequeue_buffer: waiting on buffer\n");
 			/* Drop lock to avoid deadlock with qbuf */
 			mutex_unlock(&queue->mutex);
 

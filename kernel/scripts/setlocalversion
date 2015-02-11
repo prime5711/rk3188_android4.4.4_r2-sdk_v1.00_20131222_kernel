@@ -32,6 +32,7 @@ scm_version()
 {
 	local short
 	short=false
+	echo "shcho:1111"
 
 	cd "$srctree"
 	if test -e .scmversion; then
@@ -53,6 +54,7 @@ scm_version()
 			# running further git commands
 			if $short; then
 				echo "+"
+				echo "--------------"
 				return
 			fi
 			# If we are past a tagged commit (like
