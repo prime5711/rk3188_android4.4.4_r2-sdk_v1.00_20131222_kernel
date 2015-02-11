@@ -47,8 +47,8 @@
 #define  SPKOUT_VOLUME    24 //0~31
 #define  HPOUT_VOLUME     20 //0~31
 #else
-#define  SPKOUT_VOLUME    24 //0~31
-#define  HPOUT_VOLUME     24 //0~31
+#define  SPKOUT_VOLUME    31 //0~31
+#define  HPOUT_VOLUME     31 //0~31
 #endif
 
 /* volume setting
@@ -566,7 +566,8 @@ static int rk616_set_gpio(int gpio, bool level)
 		return 0;
 	}
 
-	DBG("%s : set %s %s %s %s ctl gpio %s\n", __func__,
+//  	DBG("%s : set %s %s %s %s ctl gpio %s\n", __func__,
+	printk("%s : set %s %s %s %s ctl gpio %s\n", __func__,
 		gpio & RK616_CODEC_SET_SPK ? "spk" : "",
 		gpio & RK616_CODEC_SET_HP ? "hp" : "",
 		gpio & RK616_CODEC_SET_RCV ? "rcv" : "",

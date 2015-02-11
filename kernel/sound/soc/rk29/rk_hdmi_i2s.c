@@ -12,8 +12,9 @@
 #include "rk29_pcm.h"
 #include "rk29_i2s.h"
 
-#if 0
-#define DBG(x...) printk(KERN_INFO "rk_hdmi_i2s:"x)
+#if 1
+//  #define DBG(x...) printk(KERN_INFO "rk_hdmi_i2s:"x)
+#define DBG(x...) printk("rk_hdmi_i2s:"x)
 #else
 #define DBG(x...) do { } while (0)
 #endif

@@ -37,6 +37,10 @@
 #define IRQ_SMC                         61
 #define IRQ_PIDF                        62
 
+//shcho add
+#define RK30XX_IRQ(x)                   (x + 32)
+#define IRQ_I2S0_8CH                    RK30XX_IRQ(31)
+
 #define IRQ_I2S1_2CH                    64
 #define IRQ_SPDIF                       65
 #define IRQ_UART0                       66

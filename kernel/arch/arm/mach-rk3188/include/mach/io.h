@@ -46,6 +46,11 @@
 #define RK30_RGA_PHYS           0x10114000
 #define RK30_RGA_SIZE           SZ_8K
 
+#define RK30_I2S0_8CH_PHYS      0x10118000
+#define RK30_I2S0_8CH_SIZE      SZ_8K
+#define RK30_I2S2_2CH_PHYS      0x1011c000
+#define RK30_I2S2_2CH_SIZE      SZ_8K
+
 #define RK30_I2S1_2CH_PHYS      0x1011a000
 #define RK30_I2S1_2CH_SIZE      SZ_8K
 #define RK30_SPDIF_PHYS         0x1011e000

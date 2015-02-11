@@ -15,7 +15,8 @@ config SND_RK_SOC_SPDIF
 config SND_RK29_SOC_I2S_8CH
 	bool "Soc RK29 I2S 8 Channel support(I2S0)"
 	default y
-	depends on SND_RK29_SOC_I2S && !ARCH_RK3066B && !ARCH_RK3188
+#	depends on SND_RK29_SOC_I2S && !ARCH_RK3066B && !ARCH_RK3188
+	depends on SND_RK29_SOC_I2S && !ARCH_RK3066B && ARCH_RK3188
 	help
        This supports the use of the 8 Channel I2S interface on rk29 processors.
 				
@@ -74,13 +75,15 @@ choice
   bool "Set audio support for HDMI"
   default SND_RK_SOC_HDMI_I2S
 	config SND_RK_SOC_HDMI_I2S
-		depends on !RK616_USE_MCLK_12M || !SND_RK_SOC_RK616
+#		depends on !RK616_USE_MCLK_12M || !SND_RK_SOC_RK616
+		depends on SND_RK_SOC_RK616
 		select SND_RK29_SOC_I2S
 		select SND_SOC_HDMI_I2S
 		tristate  "HDMI use I2S"
 
 	config SND_RK_SOC_HDMI_SPDIF
-		depends on SND_RK_SOC_RK616
+#		depends on SND_RK_SOC_RK616
+		depends on !RK616_USE_MCLK_12M || !SND_RK_SOC_RK616
 		select SND_RK_SOC_SPDIF
 		select SND_SOC_HDMI_SPDIF
 		tristate  "HDMI use SPDIF"
