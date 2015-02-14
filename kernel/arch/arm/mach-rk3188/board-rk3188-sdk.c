@@ -92,7 +92,7 @@
 #include <linux/combo_mt66xx.h>
 #endif
 
-#include "../mach-rk30/board-rk3168-tb-camera.c"
+//  #include "../mach-rk30/board-rk3168-tb-camera.c"
 
 #if defined(CONFIG_TOUCHSCREEN_GT8XX)
 #define TOUCH_RESET_PIN  RK30_PIN0_PB6
@@ -2303,7 +2303,18 @@ static void __init machine_rk30_board_init(void)
 	
 	pm_power_off = rk30_pm_power_off;
 	
-        gpio_direction_output(POWER_ON_PIN, GPIO_HIGH);
+    gpio_direction_output(POWER_ON_PIN, GPIO_HIGH);
+
+	//shcho add
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+	gpio_request(RK30_PIN3_PD7, "usbhub_reset");
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_HIGH);
+	udelay(1000);
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_LOW);
+	udelay(1000);
+	gpio_direction_output(RK30_PIN3_PD7, GPIO_HIGH);
+
 
 
 	rk30_i2c_register_board_info();

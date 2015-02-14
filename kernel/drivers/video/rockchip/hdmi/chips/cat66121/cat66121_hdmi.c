@@ -165,11 +165,14 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 {
 	int rc = 0;
 	struct rk_hdmi_platform_data *pdata = client->dev.platform_data;
+
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 	
 	cat66121_hdmi = kzalloc(sizeof(struct cat66121_hdmi_pdata), GFP_KERNEL);
 	if(!cat66121_hdmi)
 	{
 		dev_err(&client->dev, "no memory for state\n");
+		printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 		return -ENOMEM;
 	}
 	cat66121_hdmi->client = client;
@@ -179,6 +182,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 	if(!hdmi)
 	{
     	dev_err(&client->dev, "cat66121 hdmi kmalloc fail!");
+		printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
     	goto err_kzalloc_hdmi;
 	}
 	memset(hdmi, 0, sizeof(struct hdmi));
@@ -192,11 +196,13 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 	{
 		dev_err(hdmi->dev, "can not connect to video source lcdc\n");
 		rc = -ENXIO;
+		printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 		goto err_request_lcdc;
 	}
 	if(pdata->io_init){
 		if(pdata->io_init()<0){
 			dev_err(&client->dev, "fail to rst chip\n");
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 			goto err_request_lcdc;
 		}
 	}
@@ -204,6 +210,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 	if(cat66121_detect_device()!=1){
 		dev_err(hdmi->dev, "can't find it66121 device \n");
 		rc = -ENXIO;
+		printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 		goto err_request_lcdc;
 	}
 
@@ -211,6 +218,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 		dev_err(hdmi->dev, "can't find it66121 irq\n");
 			dev_err(hdmi->dev, " please set irq or use irq INVALID_GPIO for poll mode\n");
 		rc = -ENXIO;
+		printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 		goto err_request_lcdc;
 	}
 
@@ -271,6 +279,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 		if((rc = gpio_request(client->irq, "hdmi gpio")) < 0)
 		{
 			dev_err(&client->dev, "fail to request gpio %d\n", client->irq);
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 			goto err_request_lcdc;
 		}
 
@@ -280,6 +289,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 		if((rc = request_threaded_irq(hdmi->irq, NULL ,cat66121_thread_interrupt, IRQF_TRIGGER_LOW | IRQF_ONESHOT, dev_name(&client->dev), hdmi)) < 0)
 		{
 			dev_err(&client->dev, "fail to request hdmi irq\n");
+			printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 			goto err_request_irq;
 		}
 	}else{
@@ -290,6 +300,7 @@ static int cat66121_hdmi_i2c_probe(struct i2c_client *client,const struct i2c_de
 
 	dev_info(&client->dev, "cat66121 hdmi i2c probe ok\n");
 	
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
     return 0;
 	
 err_request_irq:
@@ -301,6 +312,7 @@ err_kzalloc_hdmi:
 	kfree(cat66121_hdmi);
 	cat66121_hdmi = NULL;
 	dev_err(&client->dev, "cat66121 hdmi probe error\n");
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
 	return rc;
 
 }
@@ -367,6 +379,7 @@ static struct i2c_driver cat66121_hdmi_i2c_driver = {
 
 static int __init cat66121_hdmi_init(void)
 {
+	printk("\n\n\t \033[22;30;31m line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
     return i2c_add_driver(&cat66121_hdmi_i2c_driver);
 }
 

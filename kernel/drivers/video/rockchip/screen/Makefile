@@ -67,6 +67,8 @@ obj-$(CONFIG_LCD_MQ0801D)    += lcd_mq0801d.o
 obj-$(CONFIG_LCD_LD089WU1_MIPI)   += lcd_LD089WU1_mipi.o
 obj-$(CONFIG_LCD_B080XAN02_MIPI)   += lcd_B080XAN02_mipi.o
 
+obj-$(CONFIG_LCD_KEIT_FULHD)   += lcd_hdmi_1920x1080.o
+
 #shcho dh
 obj-$(CONFIG_LCD_RK618_CMI_EJ101IA_1280X800)  += lcd_rk618_CMI_EJ101IA.o
 

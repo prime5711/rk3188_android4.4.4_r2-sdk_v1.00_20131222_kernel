@@ -15,11 +15,11 @@ $1 $2 $3 $4 $5
 
 
 if [ "$1" = "kernel.img" ] ; then
-	printf "\n\n\t \033[1;30;31m   cp kernel.img /media/sf_C_DRIVE/RK3188/shcho_img/kernel.4.4.4_r2.img"
+	printf "\n\n\t \033[1;30;31m   cp kernel.img /media/sf_C_DRIVE/RK3188/shcho_img/kernel.4.4.4_r2_k.img"
 	printf "\n\n\t"
 #	printf "cp arch/arm/boot/Image /media/shcho2/ccache_build/android_build/rk3188_rk3066_r-box_android4.4.2_sdk/target/product/radxa_rock_pro/kernel"
 	printf "\033[0m \n\n" 
-	cp kernel.img /media/sf_C_DRIVE/RK3188/shcho_img/kernel.4.4.4_r2.img
+	cp kernel.img /media/sf_C_DRIVE/RK3188/shcho_img/kernel.4.4.4_r2_k.img
 #	cp arch/arm/boot/Image /media/shcho2/ccache_build/android_build/rk3188_rk3066_r-box_android4.4.2_sdk/target/product/radxa_rock_pro/kernel
 fi
 

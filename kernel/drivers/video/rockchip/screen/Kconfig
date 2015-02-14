@@ -5,6 +5,10 @@ choice
 config LCD_NULL
 	bool "NULL"
 
+config LCD_KEIT_FULHD
+	bool "RK3188 ITU66121 1920x1080 fot keti "
+
+
 config LCD_RK618_CMI_EJ101IA_1280X800
 	bool "RK3188 RK618 Daihansci CMI EJ101IA LCD 1280X800"
 

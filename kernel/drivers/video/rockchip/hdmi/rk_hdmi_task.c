@@ -117,7 +117,8 @@ void hdmi_sys_remove(void)
 		 rk616_codec_set_spk(1);
 	#endif 
 #else
-	codec_set_spk(1);
+	printk("\n\n\t \033[22;30;31m Disable codec_set_spk for T.B.D line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+//  	codec_set_spk(1);
 #endif
 	#endif
 }
@@ -272,7 +273,8 @@ void hdmi_work(struct work_struct *work)
 							rk616_codec_set_spk(0);
 						#endif	
 					#else
-						codec_set_spk(0);
+						printk("\n\n\t \033[22;30;31m Disable codec_set_spk for T.B.D line:%d:@%s in %s                \033[0m \n\n",__LINE__,__FUNCTION__,__FILE__  ); 
+//  						codec_set_spk(0);
 					#endif
 					#endif
 				}
