@@ -2169,16 +2169,17 @@ static void rk_camera_setup_format(struct soc_camera_device *icd, __u32 host_pix
     		pcdev->pixfmt = host_pixfmt;
     		break;
         case V4L2_PIX_FMT_NV12:
-//              cif_fmt_val |= YUV_OUTPUT_420;
-//      		cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
-//  			if (pcdev->frame_inval != RK_CAM_FRAME_INVAL_INIT)
-//  				pcdev->frame_inval = RK_CAM_FRAME_INVAL_INIT;
-//  			pcdev->pixfmt = host_pixfmt;
+            cif_fmt_val |= YUV_OUTPUT_420;
+    		cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
+			if (pcdev->frame_inval != RK_CAM_FRAME_INVAL_INIT)
+				pcdev->frame_inval = RK_CAM_FRAME_INVAL_INIT;
+			pcdev->pixfmt = host_pixfmt;
 
-            cif_fmt_val &= ~YUV_OUTPUT_422;
-		    cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
-		    pcdev->frame_inval = RK_CAM_FRAME_INVAL_DC;
-		    pcdev->pixfmt = V4L2_PIX_FMT_RGB24;
+// shcho test NV16것을 copy함
+//              cif_fmt_val &= ~YUV_OUTPUT_422;
+//  		    cif_fmt_val &= ~UV_STORAGE_ORDER_UVUV;
+//  		    pcdev->frame_inval = RK_CAM_FRAME_INVAL_DC;
+//  		    pcdev->pixfmt = V4L2_PIX_FMT_RGB24;
 
             break;
     	case V4L2_PIX_FMT_NV21:
